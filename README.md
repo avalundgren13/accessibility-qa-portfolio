@@ -55,7 +55,7 @@ markdown
 
 | Type | Filename | Description |
 | :--- | :--- | :--- |
-| Screenshot | `Screenshot 2026-03-06 113738.png` | Carousel low contrast issue |
+| Screenshot | https://drive.google.com/file/d/1ScJk7CPkvCFMyEZc2dL8k14rb86igyS7/view?usp=sharing | Carousel low contrast issue |
 | Screenshot | `Screenshot 2026-03-09 121013.png` | Subheading contrast issue |
 | Screenshot | `Screenshot 2026-03-09 121421.png` | Media player contrast issue |
 | Screenshot | `Screenshot 2026-03-09 121758.png` | Second subheading contrast issue |
