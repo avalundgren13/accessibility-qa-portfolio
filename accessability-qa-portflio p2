@@ -1,0 +1,230 @@
+Accessibility Audit: Ohio University Online
+
+| **Website Tested** | Ohio University Online (homepage) |
+|-------------------|-----------------------------------|
+| **Test Date**     | June 3, 2026                      |
+| **Tester**        | Ava Lundgren                      |
+| **Tools Used**    | Axe DevTools, Lighthouse, WAVE    |
+| **WCAG Baseline** | 2.1 Level A + AA                  |
+
+---
+
+## Executive Summary
+
+**Most critical findings:** 4 very low contrast failures, 3 orphaned form labels and 1 broken ARIA tablist component. The tablist issue is the highest priority because it makes interactive content entirely unusable for screen reader and keyboard users.
+
+**Overall accessibility posture:** High-risk for assistive technology users, specifically screen readers and low-visions users.
+
+---
+
+## Tool 1: Axe DevTools
+
+| Issue | Count | Severity | WCAG |
+|-------|-------|----------|------|
+| Form field missing id or name | 1 | Serious | 4.1.2 (A) |
+| Deprecated HTML feature | 1 | Moderate | Best practice (legacy 4.1.1) |
+| Incorrect label for usage | 3 | Serious | 1.3.1 (A), 3.3.2 (A) |
+| Quirks mode rendering | 2 | Moderate | Best practice |
+
+### Issue #1: Form Field Missing ID or Name
+
+| **Severity** | Serious |
+|--------------|---------|
+| **WCAG** | 4.1.2 (A) |
+
+**User Impact:** Screen readers announce "edit" or "blank" with no content. Form submission may fail.
+
+**Recommendation:** Add unique id and matching name.
+
+---
+
+### Issue #2: Deprecated Feature
+
+| **Severity** | Moderate |
+|--------------|----------|
+| **WCAG** | Best practice (legacy 4.1.1) |
+
+**Why this matters:**
+- Deprecated features may fail in future browser updates
+- They often create unpredictable behavior with assistive technology
+- Modern semantic HTML is more accessible
+
+**Examples found:** Likely `<center>`, `<font>` or old align attributes
+
+**Recommendation:** Replace with CSS and semantic HTML5
+
+---
+
+### Issue #3: Incorrect Label for Association
+
+| **Severity** | Serious |
+|--------------|---------|
+| **WCAG** | 1.3.1 (A), 3.3.2 (A) |
+
+**User Impact:** Screen readers announce a label but cannot focus the field. Click to focus label behavior broken.
+
+**Recommendation:** Every `for` attribute must match an existing `id` on a form field.
+
+---
+
+### Issue #4: Quirks Mode
+
+| **Severity** | Moderate |
+|--------------|----------|
+| **WCAG** | Best practice |
+
+**Recommendation:** Add `<!DOCTYPE HTML>` as the very first line
+
+---
+
+## Tool 2: WAVE
+
+| Issue | Count | Severity | WCAG |
+|-------|-------|----------|------|
+| Spacer image missing alt | 1 | Moderate | 1.1.1 (A) |
+| Very low contrast | 4 | High | 1.4.3 (A) |
+| Long alternative text | 1 | Moderate | 1.1.1 (A) |
+| Orphaned form label | 3 | Serious | 1.3.1 (A), 3.3.2 (A) |
+| `<noscript>` elements | 3 | Low | Informational |
+
+### Issue #1: Spacer Image Missing Alt
+
+| **Severity** | Moderate |
+|--------------|----------|
+| **WCAG** | 1.1.1 (A) |
+
+**Why this matters:**
+- Screen readers will announce the image filename
+- This creates unnecessary noise and confusion for blind users
+- Spacer images should be invisible to assistive technology
+
+**Recommendation:** Use empty alt or `role="presentation"`
+
+---
+
+### Issue #2: Very Low Contrast (4 instances)
+
+| **Severity** | High |
+|--------------|------|
+| **WCAG** | 1.4.3 (A) |
+
+**Why this matters:**
+- Users with low vision cannot read the text
+- Users with color blindness cannot distinguish the text
+- Users with age-related vision changes struggle to read
+
+**Recommendation:** Achieve minimum 4.5:1 ratio for normal text, 3:1 for large text
+
+---
+
+### Issue #3: Long Alternative Text
+
+| **Severity** | Moderate |
+|--------------|----------|
+| **WCAG** | 1.1.1 (A) |
+
+**Why this matters:**
+- Screen readers cut off or speak excessively long descriptions
+- Screen reader users lose context or hear repetitive information
+
+**Recommendation:** Shorten to essential information. Use `aria-describedby` for complex descriptions.
+
+---
+
+### Issue #4: Orphaned Form Label
+
+| **Severity** | Serious |
+|--------------|---------|
+| **WCAG** | 1.3.1 (A), 3.3.2 (A) |
+
+**Why this matters:**
+- Screen readers announce the label but cannot find the field
+- Users cannot click the label to focus the field
+- Forms become confusing and error-prone
+
+**Recommendation:** Associate each label via `for`/`id` or by wrapping the input.
+
+---
+
+## WAVE vs Axe DevTools Comparison
+
+| Issue Type | WAVE | Axe DevTools |
+|------------|------|--------------|
+| Form labels | 3 orphaned | 3 incorrect for |
+| Color contrast | 4 failures | 0 |
+| Missing alt text | 1 | 0 |
+| Long alt text | 1 | 0 |
+
+---
+
+## Tool 3: Google Lighthouse Accessibility Audit
+
+| Metric | Result |
+|--------|--------|
+| **Accessibility Score** | 92/100 |
+| **Failed audits** | 2 |
+| **Passed** | 27 |
+
+| Issue | Count | Severity | WCAG |
+|-------|-------|----------|------|
+| ARIA parent role missing required child role | 1 | High | 1.3.1 (A), 4.1.2 (A) |
+| Background and foreground colors insufficient contrast | 1 | High | 1.4.3 (A) |
+
+### Issue #1: ARIA Parent Missing Required Child Roles
+
+| **Severity** | High |
+|--------------|------|
+| **WCAG** | 1.3.1 (A), 4.1.2 (A) |
+
+**User Impact:** Screen reader users cannot navigate tabs. Keyboard users may be trapped or unable to switch panels.
+
+**Recommendation:**
+- Add `role="tab"` to each tab control
+- Add `aria-controls` on each tab pointing to its panel
+- Add `aria-labelledby` on each panel pointing back to its tab
+- Manage `aria-selected` states
+
+---
+
+### Issue #2: Insufficient Color Contrast
+
+| **Severity** | High |
+|--------------|------|
+| **WCAG** | 1.4.3 (A) |
+
+**User Impact:** Users with low vision, color blindness or age-related vision cannot read the text.
+
+**Recommendation:** Adjust colors to 4.5:1 ratio
+
+---
+
+## Cross-Tool Comparison
+
+| Issue | Lighthouse | Axe | WAVE |
+|-------|------------|-----|------|
+| ARIA tablist missing children | ❌ Failed | ✅ Not Detected | ✅ Not Detected |
+| Color contrast | ❌ Failed (2) | ✅ Not Detected | ❌ Failed (4) |
+| Form label issues | ✅ Not Detected | ❌ Failed | ❌ Failed |
+| Missing alt text | ✅ Not Detected | ✅ Not Detected | ❌ Failed |
+| Heading structure | ✅ Not Detected | ❌ Failed | ✅ Not Detected |
+
+---
+
+## Conclusion
+
+Ohio University Online has multiple high-severity accessibility failures that create real barriers for screen reader users, keyboard-only users and users with low vision. The broken ARIA tablist is the most critical issue as it demonstrates that ARIA was added without the complete required pattern, which can make components less accessible than native HTML.
+
+---
+
+## Recommendations Summary
+
+| Priority | Issue | Tool(s) |
+|----------|-------|---------|
+| 🔴 **Critical** | Broken ARIA tablist | Lighthouse |
+| 🔴 **High** | Very low contrast (4 instances) | WAVE, Lighthouse |
+| 🟠 **Serious** | Orphaned form labels (3) | WAVE |
+| 🟠 **Serious** | Incorrect label association (3) | Axe |
+| 🟡 **Moderate** | Missing alt text | WAVE |
+| 🟡 **Moderate** | Long alternative text | WAVE |
+| 🟡 **Moderate** | Deprecated HTML | Axe |
+| 🟡 **Moderate** | Quirks mode | Axe |
